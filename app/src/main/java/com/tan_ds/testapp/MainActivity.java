@@ -34,12 +34,18 @@ public class MainActivity extends Activity {
             return null;
         }
 
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            Log.v("Thread work", "Postexecute: " + Thread.currentThread().getId());
+        }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
 
-            Log.v("Thread work", "execute: " + Thread.currentThread().getId());
+            Log.v("Thread work", "Preexecute: " + Thread.currentThread().getId());
         }
     }
 
