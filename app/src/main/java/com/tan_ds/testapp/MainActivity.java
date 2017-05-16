@@ -1,6 +1,8 @@
 package com.tan_ds.testapp;
 
 import android.app.Activity;
+import android.nfc.Tag;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -11,41 +13,35 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
-    private Handler handler;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        handler = new Handler();
-        HandlerThread thread = new HandlerThread("Handler thread ");
-        thread.start();
-        handler = new Handler(thread.getLooper());
-        new Thread (new MakeMeGreatAgain()).start();
-
+        AssyncTaskimpl ass = new AssyncTaskimpl();
+        ass.execute();
 
 
     }
 
-private class MakeMeGreatAgain implements Runnable{
+    private class AssyncTaskimpl extends AsyncTask <Void, Void, Void>{
 
-    @Override
-    public void run() {
-        Log.v("Thread work", "Worker: " + Thread.currentThread().getId());
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            Log.v("Thread work", "back: " + Thread.currentThread().getId());
+            return null;
+        }
 
 
-        Runnable callback = new Runnable() {
-            @Override
-            public void run() {
-                Log.v("Thread work", "callback: " + Thread.currentThread().getId());
-                Toast.makeText(MainActivity.this, "Task!", Toast.LENGTH_SHORT).show();
-            }
-        };
-        handler.postDelayed(callback, 100);
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
 
+            Log.v("Thread work", "execute: " + Thread.currentThread().getId());
+        }
     }
-}
+
+
 }
