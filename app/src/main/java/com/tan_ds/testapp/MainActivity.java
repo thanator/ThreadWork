@@ -3,7 +3,6 @@ package com.tan_ds.testapp;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.HandlerThread;
 import android.os.SystemClock;
 import android.provider.Settings;
 import android.util.Log;
@@ -19,12 +18,17 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+  /*      Log.v("curr create act", "" + Thread.currentThread().getId());
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
 
+            }
+        });
+        thread.start();*/
         handler = new Handler();
-        HandlerThread thread = new HandlerThread("Handler thread ");
+        Thread thread = new Thread (new MakeMeGreatAgain());
         thread.start();
-        handler = new Handler(thread.getLooper());
-        new Thread (new MakeMeGreatAgain()).start();
 
 
 
@@ -44,7 +48,8 @@ private class MakeMeGreatAgain implements Runnable{
                 Toast.makeText(MainActivity.this, "Task!", Toast.LENGTH_SHORT).show();
             }
         };
-        handler.postDelayed(callback, 100);
+        handler.postDelayed(callback, 5000);
+        handler.removeCallbacksAndMessages(callback);
 
     }
 }
