@@ -3,6 +3,7 @@ package com.tan_ds.testapp;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.SystemClock;
 import android.provider.Settings;
 import android.util.Log;
@@ -10,7 +11,7 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
-    private Handler handler = new Handler();
+    private Handler handler;
 
 
     @Override
@@ -18,17 +19,12 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-  /*      Log.v("curr create act", "" + Thread.currentThread().getId());
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
 
-            }
-        });
-        thread.start();*/
-
-  Thread thread = new Thread (new MakeMeGreatAgain());
+        handler = new Handler();
+        HandlerThread thread = new HandlerThread("Handler thread ");
         thread.start();
+        handler = new Handler(thread.getLooper());
+        new Thread (new MakeMeGreatAgain()).start();
 
 
 
@@ -41,14 +37,14 @@ private class MakeMeGreatAgain implements Runnable{
         Log.v("Thread work", "Worker: " + Thread.currentThread().getId());
 
 
-        handler.postDelayed(new Runnable() {
+        Runnable callback = new Runnable() {
             @Override
             public void run() {
                 Log.v("Thread work", "callback: " + Thread.currentThread().getId());
-                Toast.makeText(MainActivity.this, "Task ended!", Toast.LENGTH_SHORT);
+                Toast.makeText(MainActivity.this, "Task!", Toast.LENGTH_SHORT).show();
             }
-        }, 5000);
-        handler.removeCallbacksAndMessages(null);
+        };
+        handler.postDelayed(callback, 100);
 
     }
 }
