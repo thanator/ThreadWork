@@ -26,33 +26,29 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         mHandler = new Handler(new HandlerCallBack());
-        mHandler.sendEmptyMessage(100500);
-        Message msg = Message.obtain();
-        msg.what = 42;
-        msg.arg1 = 24;
-        msg.arg2 = 1;
-
-        mHandler.sendMessage(msg);
-
-        //mHandler.removeMessages(42);
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                Log.v("Thread work", "ILITA");
+                mHandler.postDelayed(this, 2000);
+            }
+        });
 
     }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mHandler.removeCallbacksAndMessages(null);
+    }
+
     private class HandlerCallBack implements Handler.Callback{
 
         @Override
         public boolean handleMessage(Message msg) {
 
-            switch (msg.what){
-                case 42:
-                    break;
-                case 100500:
-                    Log.v("Thread work", "ILITA: " + msg);
-                    break;
-                default:
-                    break;
-            }
-
-            Log.v("Thread work", "handlmsg: " + msg);
+            Log.v("Thread work", "handlmsg: ");
             return false;
         }
     }
