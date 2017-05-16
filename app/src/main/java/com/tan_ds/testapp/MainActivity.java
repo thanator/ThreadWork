@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
-    private Handler handler;
+    private Handler handler = new Handler();
 
 
     @Override
@@ -26,8 +26,8 @@ public class MainActivity extends Activity {
             }
         });
         thread.start();*/
-        handler = new Handler();
-        Thread thread = new Thread (new MakeMeGreatAgain());
+
+  Thread thread = new Thread (new MakeMeGreatAgain());
         thread.start();
 
 
@@ -41,15 +41,14 @@ private class MakeMeGreatAgain implements Runnable{
         Log.v("Thread work", "Worker: " + Thread.currentThread().getId());
 
 
-        Runnable callback = new Runnable() {
+        handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 Log.v("Thread work", "callback: " + Thread.currentThread().getId());
-                Toast.makeText(MainActivity.this, "Task!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Task ended!", Toast.LENGTH_SHORT);
             }
-        };
-        handler.postDelayed(callback, 5000);
-        handler.removeCallbacksAndMessages(callback);
+        }, 5000);
+        handler.removeCallbacksAndMessages(null);
 
     }
 }
